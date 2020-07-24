@@ -21,6 +21,8 @@ impl std::fmt::Display for TessInitError {
     }
 }
 
+impl std::error::Error for TessInitError {}
+
 #[derive(Debug, PartialEq)]
 pub struct TessApi {
     pub raw: *mut capi::TessBaseAPI,
