@@ -57,7 +57,7 @@ impl TessApi {
 
         let api = TessApi {
             raw: unsafe { capi::TessBaseAPICreate() },
-            data_path_cptr: data_path_cptr,
+            data_path_cptr,
         };
 
         unsafe {
@@ -68,9 +68,9 @@ impl TessApi {
             );
 
             if re == 0 {
-                return Ok(api);
+                Ok(api)
             } else {
-                return Err(TessInitError { code: re });
+                Err(TessInitError { code: re })
             }
         }
     }
@@ -113,7 +113,7 @@ impl TessApi {
                 }
             }
             capi::TessDeleteText(sptr);
-            return re;
+            re
         }
     }
 
@@ -127,7 +127,7 @@ impl TessApi {
             if boxes.is_null() {
                 return None;
             }
-            return Some(leptonica::Boxa { raw: boxes });
+            Some(leptonica::Boxa { raw: boxes })
         }
     }
 
@@ -155,7 +155,7 @@ impl TessApi {
             if boxes.is_null() {
                 return None;
             }
-            return Some(leptonica::Boxa { raw: boxes });
+            Some(leptonica::Boxa { raw: boxes })
         }
     }
 }

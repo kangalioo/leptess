@@ -43,6 +43,8 @@
 //! sudo apt-get install tesseract-ocr-eng
 //! ```
 
+#![allow(clippy::temporary_cstring_as_ptr)]
+
 pub mod capi;
 pub mod leptonica;
 pub mod tesseract;
@@ -147,7 +149,7 @@ impl LepTess {
     }
 
     /// Restrict OCR to a specific region of the image.
-    pub fn set_rectangle<'a, 'b>(&'a mut self, b: &'b leptonica::Box) {
+    pub fn set_rectangle(&mut self, b: &leptonica::Box) {
         self.tess_api.set_rectangle(b)
     }
 

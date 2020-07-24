@@ -38,7 +38,7 @@ pub fn pix_read(path: &Path) -> Option<Pix> {
             return None;
         }
 
-        return Some(Pix { raw: pix });
+        Some(Pix { raw: pix })
     }
 }
 
@@ -49,7 +49,7 @@ pub fn pix_read_mem(img: &[u8]) -> Option<Pix> {
             return None;
         }
 
-        return Some(Pix { raw: pix });
+        Some(Pix { raw: pix })
     }
 }
 
@@ -72,6 +72,7 @@ impl Drop for Box {
 }
 
 impl Box {
+    #[allow(clippy::many_single_char_names)]
     pub fn new(x: i32, y: i32, w: i32, h: i32) -> Option<Box> {
         unsafe {
             let p = capi::boxCreateValid(x, y, w, h);
@@ -144,7 +145,7 @@ impl IntoIterator for Boxa {
         BoxaIterator {
             boxa: self,
             index: 0,
-            count: count,
+            count,
         }
     }
 }
@@ -179,7 +180,7 @@ impl<'a> IntoIterator for &'a Boxa {
         BoxaRefIterator {
             boxa: self,
             index: 0,
-            count: count,
+            count,
         }
     }
 }
