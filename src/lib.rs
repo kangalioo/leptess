@@ -43,6 +43,8 @@
 //! sudo apt-get install tesseract-ocr-eng
 //! ```
 
+#![allow(clippy::temporary_cstring_as_ptr)]
+
 pub mod capi;
 pub mod leptonica;
 pub mod tesseract;
@@ -99,22 +101,26 @@ impl LepTess {
     }
 
     /// Set image to use for OCR.
-    pub fn set_image(&mut self, img_uri: &str) -> bool {
+    #[must_use]
+    pub fn set_image(&mut self, img_uri: impl AsRef<Path>) -> Option<()> {
         // TODO: support more uri scheme, default to file://
-        let path = Path::new(img_uri);
-        let re = leptonica::pix_read(path);
+        
+        self.tess_api.set_image(&leptonica::pix_read(img_uri.as_ref())?);
+        Some(())
+    }
 
-        match re {
-            Some(pix) => {
-                self.tess_api.set_image(&pix);
-                true
-            }
-            None => false,
-        }
+    #[must_use]
+    pub fn set_image_from_mem(&mut self, img: &[u8]) -> Option<()> {
+        self.tess_api.set_image(&leptonica::pix_read_mem(img)?);
+        Some(())
     }
 
     pub fn get_source_y_resolution(&mut self) -> i32 {
         self.tess_api.get_source_y_resolution()
+    }
+
+    pub fn get_image_dimensions(&self) -> Option<(u32, u32)> {
+        self.tess_api.get_image_dimensions()
     }
 
     /// Override image resolution.
