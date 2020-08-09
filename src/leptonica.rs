@@ -44,7 +44,7 @@ pub fn pix_read(path: &Path) -> Option<Pix> {
 
 pub fn pix_read_mem(img: &[u8]) -> Option<Pix> {
     unsafe {
-        let pix = capi::pixReadMem(img.as_ptr(), img.len() as u64);
+        let pix = capi::pixReadMem(img.as_ptr(), img.len() as std::os::raw::c_ulong);
         if pix.is_null() {
             return None;
         }
